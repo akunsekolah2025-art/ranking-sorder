@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RANKING SORDER BY RIZKI ANANDA</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            --bg-body: #f1f5f9;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--bg-body);
+            background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+                              radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.05) 0px, transparent 50%);
+            color: var(--text-dark);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            padding: 60px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Glass Panel Control */
+        .control-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 30px;
+            border-radius: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Modern Buttons */
+        button {
+            padding: 14px 24px;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-download {
+            background: var(--white);
+            color: var(--text-dark);
+            border: 1px solid var(--bg-body);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: #fafafa;
+        }
+
+        .btn-proses {
+            background: var(--primary-gradient);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-proses:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-cetak {
+            background: #1e293b;
+            color: white;
+        }
+
+        .btn-cetak:hover {
+            background: #0f172a;
+        }
+
+        /* Table Styling */
+        .table-wrapper {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #f1f5f9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 20px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-transform: uppercase;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid #f8fafc;
+            transition: background 0.3s ease;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        tr:hover td {
+            background: #fdfdff;
+        }
+
+        /* Rank Badge */
+        .rank-circle {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            background: #f1f5f9;
+            color: var(--text-light);
+        }
+
+        tr:nth-child(1) .rank-circle { background: #fef3c7; color: #92400e; box-shadow: 0 2px 10px rgba(251, 191, 36, 0.2); }
+        tr:nth-child(2) .rank-circle { background: #f1f5f9; color: #475569; }
+        tr:nth-child(3) .rank-circle { background: #ffedd5; color: #9a3412; }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .row-anim {
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* File Input */
+        input[type="file"] {
+            padding: 10px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        @media print {
+            .control-panel, .subtitle { display: none; }
+            body { padding: 0; background: white; }
+            .container { max-width: 100%; }
+            .table-wrapper { box-shadow: none; border: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>RANKING SORDER BY RIZKI ANANDA</h1>
+        <p class="subtitle">Platform Manajemen Peringkat Akademik Pintar</p>
+    </header>
+
+    <div class="control-panel">
+        <div class="input-group">
+            <label>Langkah 1: Format</label>
+            <button class="btn-download" onclick="downloadTemplate()">📄 Download Template</button>
+        </div>
+
+        <div class="input-group">
+            <label>Langkah 2: Data</label>
+            <input type="file" id="inputExcel" accept=".xlsx, .xls">
+        </div>
+
+        <div class="input-group">
+            <label>Langkah 3: Proses</label>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-proses" onclick="prosesData()">Analisis & Urutkan</button>
+                <button class="btn-cetak" onclick="window.print()">Cetak</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table id="tabelHasil">
+            <thead>
+                <tr>
+                    <th style="width: 120px">Peringkat</th>
+                    <th>Nama Lengkap</th>
+                    <th style="text-align: right;">Nilai</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function downloadTemplate() {
+        const header = [["Nama", "Nilai"]];
+        const ws = XLSX.utils.aoa_to_sheet(header);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Data Siswa");
+        XLSX.writeFile(wb, "Template_Siswa_RizkiAnanda.xlsx");
+    }
+
+    function prosesData() {
+        const fileInput = document.getElementById('inputExcel');
+        if (fileInput.files.length === 0) {
+            alert("Harap pilih file Excel terlebih dahulu!");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            let json = XLSX.utils.sheet_to_json(worksheet);
+
+            // Sort logic (Besar ke Kecil)
+            json.sort((a, b) => (b.Nilai || 0) - (a.Nilai || 0));
+
+            const tbody = document.querySelector("#tabelHasil tbody");
+            tbody.innerHTML = ""; 
+
+            json.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'row-anim';
+                tr.style.animationDelay = `${index * 0.05}s`; // Staggered delay
+                
+                tr.innerHTML = `
+                    <td><div class="rank-circle">${index + 1}</div></td>
+                    <td style="font-weight: 600;">${item.Nama || "Tanpa Nama"}</td>
+                    <td style="text-align: right; font-weight: 800; color: #4f46e5;">${item.Nilai || 0}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    }
+</script>
+
+</body>
+</html>
